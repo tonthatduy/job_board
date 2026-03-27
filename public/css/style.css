@@ -1,0 +1,15 @@
+* {
+    box-sizing: border-box;
+}
+
+h1 {
+    color: red;
+}
+.card:hover {
+    border: 1px solid #0d6efd;
+    transition: 0.2s;
+}
+
+img {
+    object-fit: cover;
+}

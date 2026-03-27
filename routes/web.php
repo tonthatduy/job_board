@@ -9,6 +9,13 @@ Route::get('/', function () {
 });
 
 Route::get('/job', function () {
-    $job = Job::all();
-    return view('job', compact('job'));
+    $jobs = Job::with(['company','location','level','categories'])->paginate(5);
+    return view('job', compact('jobs'));
+});
+
+Route::get('/job/{slug}', function ($slug) {
+    $job = Job::where('slug', $slug)
+            ->with(['company','location','level','categories'])
+            ->firstOrFail();
+    return view('job-detail', compact('job'));
 });
