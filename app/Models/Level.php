@@ -6,5 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Level extends Model
 {
-    //
+    //Relationship
+    public function jobs()
+    {
+        return $this->hasMany(Job::class);
+    }
 }
