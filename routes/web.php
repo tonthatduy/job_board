@@ -1,21 +1,14 @@
 <?php
 
+use App\Http\Controllers\JobController;
 use App\Models\Category;
 use App\Models\Job;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Route::get('/job', function () {
-    $jobs = Job::with(['company','location','level','categories'])->paginate(5);
-    return view('job', compact('jobs'));
-});
+Route::get('/', [JobController::class, 'index']);
 
-Route::get('/job/{slug}', function ($slug) {
-    $job = Job::where('slug', $slug)
-            ->with(['company','location','level','categories'])
-            ->firstOrFail();
-    return view('job-detail', compact('job'));
-});
+Route::get('/job/{slug}', [JobController::class,'show']) -> name('jobs.show');

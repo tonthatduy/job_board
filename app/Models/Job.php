@@ -21,6 +21,9 @@ class Job extends Model
         'expired_at'
     ];
 
+    protected $casts = ['is_remote' => 'boolean',
+    ];
+
 
     // Relationship
     public function categories()
@@ -33,13 +36,14 @@ class Job extends Model
         return $this->belongsTo(Company::class);
     }
 
-     public function location()
+    public function location()
     {
         return $this->belongsTo(Location::class);
     }
 
-     public function level()
+    public function level()
     {
         return $this->belongsTo(Level::class);
     }
+
 }
