@@ -20,7 +20,7 @@
                 <select name="location" class="filter-select">
                     <option value="">All locations</option>
                     @foreach($locations as $loc)
-                        <option value="{{ $loc->id }}" {{ request('location') == $loc->id ? 'selected' : '' }}>
+                        <option value="{{ $loc->id }}" {{ request()->get('location') == $loc->id ? 'selected' : '' }}>
                             {{ $loc->name }}
                         </option>
                     @endforeach
@@ -29,7 +29,7 @@
                 <select name="category" class="filter-select">
                     <option value="">All categories</option>
                     @foreach($categories as $cat)
-                        <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>
+                        <option value="{{ $cat->id }}" {{ request()->get('category') == $cat->id ? 'selected' : '' }}>
                             {{ $cat->name }}
                         </option>
                     @endforeach
@@ -38,7 +38,7 @@
                 <select name="level" class="filter-select">
                     <option value="">All levels</option>
                     @foreach($levels as $lv)
-                        <option value="{{ $lv->id }}" {{ request('level') == $lv->id ? 'selected' : '' }}>
+                        <option value="{{ $lv->id }}" {{ request()->get('level') == $lv->id ? 'selected' : '' }}>
                             {{ $lv->name }}
                         </option>
                     @endforeach
@@ -46,12 +46,12 @@
 
                 <select name="sort" class="filter-select">
                     <option value="">Default</option>
-                    <option value="title_asc" {{ request('sort') == 'title_asc' ? 'selected' : '' }}>⬆ Title</option>
-                    <option value="title_desc" {{ request('sort') == 'title_desc' ? 'selected' : '' }}>⬇ Title</option>
-                    <option value="salary_from_asc" {{ request('sort') == 'salary_from_asc' ? 'selected' : '' }}>⬆ Salary From</option>
-                    <option value="salary_from_desc" {{ request('sort') == 'salary_from_desc' ? 'selected' : '' }}>⬇ Salary From</option>
-                    <option value="salary_to_asc" {{ request('sort') == 'salary_to_asc' ? 'selected' : '' }}>⬆  Salary To</option>
-                    <option value="salary_to_desc" {{ request('sort') == 'salary_to_desc' ? 'selected' : '' }}>⬇ Salary To</option>
+                    <option value="title_asc" {{ request()->get('sort') == 'title_asc' ? 'selected' : '' }}>⬆ Title</option>
+                    <option value="title_desc" {{ request()->get('sort') == 'title_desc' ? 'selected' : '' }}>⬇ Title</option>
+                    <option value="salary_from_asc" {{ request()->get('sort') == 'salary_from_asc' ? 'selected' : '' }}>⬆ Salary From</option>
+                    <option value="salary_from_desc" {{ request()->get('sort') == 'salary_from_desc' ? 'selected' : '' }}>⬇ Salary From</option>
+                    <option value="salary_to_asc" {{ request()->get('sort') == 'salary_to_asc' ? 'selected' : '' }}>⬆  Salary To</option>
+                    <option value="salary_to_desc" {{ request()->get('sort') == 'salary_to_desc' ? 'selected' : '' }}>⬇ Salary To</option>
                 </select>
             </div>
         </div>
