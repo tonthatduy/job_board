@@ -2,7 +2,9 @@
 
     <x-hero />
     <x-job-filter />
-    <x-job-list :jobs="$jobs" />
+    <section class="mt-4 px-4" id="job-list-container">
+        <x-job-list :jobs="$jobs" />
+    </section>
     <x-footer-subcribe />
     <x-footer />
 

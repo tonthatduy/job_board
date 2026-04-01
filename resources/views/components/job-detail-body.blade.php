@@ -10,7 +10,7 @@
                     Job Description
                 </h2>
 
-                <div class="mt-8 prose max-w-none text-sm text-slate-700 dark:text-navy-100">
+                <div class="prose mt-8 prose max-w-none text-sm text-slate-700 dark:text-navy-100">
                     {!! $job->description !!}
                 </div>
 

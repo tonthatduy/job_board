@@ -2,9 +2,6 @@
     box-sizing: border-box;
 }
 
-h1 {
-    color: red;
-}
 .card:hover {
     border: 1px solid #0d6efd;
     transition: 0.2s;
@@ -12,4 +9,54 @@ h1 {
 
 img {
     object-fit: cover;
+}
+
+.ck-editor__editable {
+    min-height: 200px;
+    padding: 10px 20px;
+}
+.required {
+    color: red;
+}
+
+/* Tự động biến các thẻ p có thụt lề từ PhpWord thành danh sách có dấu chấm */
+.prose p span[style*="margin-bottom"] {
+    display: list-item !important;
+    list-style-type: disc !important;
+    list-style-position: inside !important;
+    margin-left: 1.5rem !important;
+    padding-left: 0.5rem;
+}
+
+/* 1. Tạo khoảng cách cho các tiêu đề cho đẹp */
+.prose h3 {
+    font-weight: 700 !important;
+    margin-top: 1.5rem !important;
+    margin-bottom: 0.75rem !important;
+    color: #1a202c;
+}
+
+/* 2. Biến các thẻ p nằm sau h3 thành dạng danh sách có dấu chấm */
+/* Selector này chọn tất cả các thẻ p là anh em đi sau h3 */
+.prose h3 ~ p {
+    display: list-item !important;
+    list-style-type: disc !important;
+    list-style-position: outside !important;
+    margin-left: 1.5rem !important;
+    padding-left: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* 3. Loại bỏ dấu chấm cho những thẻ p trắng (trường hợp PhpWord tạo p rỗng) */
+.prose h3 ~ p:empty,
+.prose h3 ~ p:has(span:empty) {
+    display: none !important;
+}
+
+/* 4. Đảm bảo các đoạn văn mở đầu (trước cái h3 đầu tiên) không bị dính dấu chấm */
+.prose p:first-of-type,
+.prose div > p:nth-child(-n + 5) {
+    display: block !important;
+    list-style-type: none !important;
+    margin-left: 0 !important;
 }

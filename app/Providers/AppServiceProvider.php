@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use Illuminate\Pagination\Paginator;
+
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +21,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
-        Paginator::useBootstrap();
+        view()->composer('*', function ($view) {
+            $view->with([
+            'companies' => \App\Models\Company::all(),
+            'locations' => \App\Models\Location::all(),
+            'levels'    => \App\Models\Level::all(),
+            'categories' => \App\Models\Category::all(),
+            ]);
+        });
     }
 }

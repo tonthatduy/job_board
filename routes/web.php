@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::get('/', [JobController::class, 'index']);
+Route::get('/', [JobController::class, 'index'])->name('pages.home');
 
 Route::get('/job/{slug}', [JobController::class,'show']) -> name('jobs.show');
+Route::post('/jobs', [JobController::class,'store']) -> name('jobs.store');
