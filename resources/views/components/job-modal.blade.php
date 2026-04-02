@@ -19,7 +19,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Apply URL <span class="required">*</span></label>
-                    <input type="url" name="apply_url" value="{{ old('apply_url') }}" required class="mt-1 block w-full border @error('apply_url') border-red-500 border-gray-300 @enderror rounded-md shadow-sm p-2">
+                    <input type="text" name="apply_url" value="{{ old('apply_url') }}" required class="mt-1 block w-full border @error('apply_url') border-red-500 border-gray-300 @enderror rounded-md shadow-sm p-2">
                     @error('apply_url') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
             </div>
@@ -45,7 +45,8 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Company <span class="required">*</span></label>
                     <select name="company_id" required class="mt-1 block w-full border border-gray-300 rounded-md p-2">
-                        <option value="">Choose Company...</option> @foreach($companies as $company)
+                        <option value="">Choose Company...</option>
+                        @foreach($companies as $company)
                             <option value="{{ $company->id }}" {{ old('company_id') == $company->id ? 'selected' : '' }}>{{ $company->name }}</option>
                         @endforeach
                     </select>

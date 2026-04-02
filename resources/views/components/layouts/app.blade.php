@@ -19,6 +19,8 @@
    <x-job-modal />
 
 <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     @if($errors->any())
         <script>
             document.addEventListener("DOMContentLoaded", function() {
@@ -38,6 +40,36 @@
             });
         </script>
     @endif
+
+    <!-- Toast Thông Báo Thành Công -->
+   @if(session('success') || session('error') || $errors->any())
+    <script>
+        // Lấy dữ liệu từ Blade sang JS an toàn
+        const msgSuccess = "{{ session('success') }}";
+        const msgError = "{{ session('error') }}";
+        const hasValidationErrors = "{{ $errors->any() ? 'true' : 'false' }}" === 'true';
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
+
+        if (msgSuccess) {
+            Toast.fire({ icon: 'success', title: msgSuccess });
+        } else if (msgError) {
+            Toast.fire({ icon: 'error', title: msgError });
+        } else if (hasValidationErrors) {
+            Toast.fire({
+                icon: 'error',
+                title: 'Dữ liệu không hợp lệ!',
+                text: 'Vui lòng kiểm tra lại các ô báo đỏ.'
+            });
+        }
+    </script>
+@endif
 
 
 </body>

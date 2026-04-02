@@ -7,6 +7,8 @@ use App\Models\Job;
 use App\Models\Level;
 use App\Models\Location;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use PhpOffice\PhpWord\IOFactory;
 
@@ -19,7 +21,7 @@ class JobController extends Controller
         // $query = Job::query();
         $query = Job::with(['company', 'location', 'level']);
 
-        //Loc tho tu khoa Search(Title)
+        //Loc theo tu khoa Search(Title)
         if ($request->filled('search')) {
             $query->where('title', 'like', '%' . $request->search . '%');
         }
@@ -89,13 +91,14 @@ class JobController extends Controller
         $request-> validate(
             [
             'title' => 'required|string|min:5|max:255',
-            'job_file' => 'required|mimes:docx|max:5120',
+            'job_file' => 'required_without:description_manual|nullable|mimes:docx|max:5120',
+            'description_manual' => 'required_without:job_file|nullable|string',
 
             'salary_from' => 'nullable|numeric|min:0',
             'salary_to' => 'nullable|numeric|min:0|gte:salary_from',
 
             'type' => 'required|in:Full-time,Part-time,Contract,Internship',
-            'apply_url' => 'required|url',
+            'apply_url' => ['required', 'regex:/^(https?:\/\/)?([\w\d-]+\.)+[\w-]+(\/.*)?$/i'],
 
             'company_id' => 'required|exists:companies,id',
             'location_id' => 'required|exists:locations,id',
@@ -110,13 +113,26 @@ class JobController extends Controller
             'salary_to.gte' => 'Mức lương tối đa phải lớn hơn hoặc bằng mức lương tối thiểu.',
             'expired_at.after' => 'Ngày hết hạn phải là một ngày trong tương lai.',
             'category_ids.required' => 'Vui lòng chọn ít nhất một danh mục công việc.',
+            'apply_url.regex' => 'Đường dẫn không đúng định dạng (Ví dụ: google.com hoặc https://google.com)',
+            'job_file.required_without' => 'Vui lòng upload file hoặc nhập mô tả công việc thủ công.',
         ]
         );
 
-        $descriptionHtml = '';
+        // Validate URL
+        $url = $request->input('apply_url')  ;
 
-        if ($request->hasFile('job_file')) {
-            try {
+        if (!preg_match("~^(?:f|ht)tps?://~i", $url)) {
+            $url = "https://" . $url;
+        }
+
+        if (!filter_var($url, FILTER_VALIDATE_URL)) {
+            return back()->withErrors(['apply_url' => 'Đường dẫn không hợp lệ!'])->withInput();
+        }
+
+        try {
+            $descriptionHtml = '';
+
+            if ($request->hasFile('job_file')) {
                 $file = $request->file('job_file');
 
                 // 2. Load file Docx bằng PhpWord
@@ -130,8 +146,7 @@ class JobController extends Controller
 
                 ob_start();
                 $htmlWriter->save('php://output');
-                $rawHtml = ob_get_contents();
-                ob_end_clean();
+                $rawHtml = ob_get_clean();
 
                 // 4. Lấy nội dung bên trong thẻ <body> để bỏ qua các thẻ <html> thừa
                 if (preg_match("/<body>(.*)<\/body>/is", $rawHtml, $matches)) {
@@ -139,41 +154,47 @@ class JobController extends Controller
                 } else {
                     $descriptionHtml = $rawHtml;
                 }
-            } catch (\Exception $e) {
-                return back()->with('error', 'Lỗi khi đọc file Word: ' . $e->getMessage());
+
+            } else {
+                $descriptionHtml = $request->description_manual;
             }
-        } elseif ($request->filled('description_manual')) {
-            $descriptionHtml = $request->description_manual;
+
+            // Kiểm tra xem cuối cùng có nội dung mô tả không
+            if (empty(trim(strip_tags($descriptionHtml)))) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['job_file' => 'Nội dung mô tả công việc không được để trống.']);
+            }
+
+            // 5. Tạo Job với đầy đủ các trường trong Fillable
+            DB::transaction(function () use ($request, $url, $descriptionHtml) {
+                $job = Job::create([
+                    'title'       => $request->title,
+                    'slug'        => Str::slug($request->title) . '-' . time(), // Thêm time để tránh trùng slug
+                    'description' => $descriptionHtml,
+                    'salary_from' => $request->salary_from,
+                    'salary_to'   => $request->salary_to,
+                    'is_remote'   => $request->boolean('is_remote'), // Checkbox trả về true/false
+                    'type'        => $request->type,
+                    'apply_url'   => $url,
+                    'company_id'  => $request->company_id,
+                    'location_id' => $request->location_id,
+                    'level_id'    => $request->level_id,
+                    'expired_at'  => $request->expired_at,
+                ]);
+
+                // Nếu có chọn categories (nhiều danh mục), hãy sync chúng
+                if ($request->has('category_ids')) {
+                    $job->categories()->sync($request->category_ids);
+                }
+            });
+
+            return redirect()->route('pages.home')->with('success', 'Đã đăng tin tuyển dụng thành công!');
+
+
+        } catch (\Exception $e) {
+            Log::error("Lỗi đăng tin: " . $e->getMessage());
+            return back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage())->withInput();
         }
-
-        // Kiểm tra xem cuối cùng có nội dung mô tả không
-        if (empty(trim(strip_tags($descriptionHtml, '<img>')))) {
-            return back()
-                ->withInput() // Giữ lại các dữ liệu đã nhập khác
-                ->withErrors(['job_description_error' => 'Vui lòng upload file hoặc nhập mô tả công việc thủ công.']);
-        }
-
-        // 5. Tạo Job với đầy đủ các trường trong Fillable
-        $job = Job::create([
-            'title'       => $request->title,
-            'slug'        => Str::slug($request->title) . '-' . time(), // Thêm time để tránh trùng slug
-            'description' => $descriptionHtml,
-            'salary_from' => $request->salary_from,
-            'salary_to'   => $request->salary_to,
-            'is_remote'   => $request->has('is_remote') ? true : false, // Checkbox trả về true/false
-            'type'        => $request->type,
-            'apply_url'   => $request->apply_url,
-            'company_id'  => $request->company_id,
-            'location_id' => $request->location_id,
-            'level_id'    => $request->level_id,
-            'expired_at'  => $request->expired_at,
-        ]);
-
-        // Nếu bạn có chọn categories (nhiều danh mục), hãy sync chúng
-        if ($request->has('category_ids')) {
-            $job->categories()->sync($request->category_ids);
-        }
-
-        return redirect()->route('pages.home')->with('success', 'Đã đăng tin tuyển dụng thành công!');
     }
 }
