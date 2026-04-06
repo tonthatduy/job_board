@@ -14,16 +14,18 @@ class Job extends Model
         'salary_to',
         'is_remote',
         'type',
+        'status',
         'apply_url',
         'company_id',
         'location_id',
         'level_id',
-        'expired_at'
+        'expired_at',
     ];
 
-    protected $casts = ['is_remote' => 'boolean',
+    protected $casts = [
+        'is_remote' => 'boolean',
+        'expired_at' => 'datetime',
     ];
-
 
     // Relationship
     public function categories()
@@ -45,5 +47,4 @@ class Job extends Model
     {
         return $this->belongsTo(Level::class);
     }
-
 }

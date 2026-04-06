@@ -114,7 +114,7 @@
                             <div class="flex justify-between">
                                 <span class="text-slate-500">Expire</span>
                                 <span class="font-medium">
-                                    {{ optional($job->expires_at)->format('M d, Y') ?? '-' }}
+                                    {{ $job->expired_at?->format('M d, Y') ?? '-' }}
                                 </span>
                             </div>
 

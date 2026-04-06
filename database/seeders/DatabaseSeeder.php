@@ -3,11 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
-use App\Models\User;
 use App\Models\Company;
 use App\Models\Job;
 use App\Models\Level;
 use App\Models\Location;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
     {
         // Job
         $jobs = [
-                // Job 1
+            // Job 1
             [
                 'title' => 'Full-Stack Developer',
                 'slug' => 'full-stack-developer',
@@ -53,11 +53,11 @@ class DatabaseSeeder extends Seeder
                 'company' => [
                     'name' => 'Google',
                     'logo' => 'https://cdn.sheetany.com/files/62s3Bya34W.png',
-                    'website' => 'https://google.com'
+                    'website' => 'https://google.com',
                 ],
                 'category' => 'Engineer',
             ],
-                // Job 2
+            // Job 2
             [
                 'title' => 'Senior Marketing Lead',
                 'slug' => 'senior-marketing-lead',
@@ -87,11 +87,11 @@ class DatabaseSeeder extends Seeder
                 'company' => [
                     'name' => 'Amazon',
                     'logo' => 'https://cdn.sheetany.com/files/l4YwwTsk1h.png',
-                    'website' => 'https://amazon.com'
+                    'website' => 'https://amazon.com',
                 ],
                 'category' => 'Marketing',
             ],
-                // Job 3
+            // Job 3
             [
                 'title' => 'Product Manager',
                 'slug' => 'product-manager',
@@ -121,12 +121,12 @@ class DatabaseSeeder extends Seeder
                 'company' => [
                     'name' => 'Netflix',
                     'logo' => 'https://cdn.sheetany.com/files/xHz4cTKDxe.png',
-                    'website' => 'https://netflix.com'
+                    'website' => 'https://netflix.com',
                 ],
                 'category' => 'Engineer',
             ],
 
-                // Job 4
+            // Job 4
             [
                 'title' => 'IT Support Specialist',
                 'slug' => 'it-support-specialist',
@@ -156,12 +156,12 @@ class DatabaseSeeder extends Seeder
                 'company' => [
                     'name' => 'Twitter',
                     'logo' => 'https://cdn.sheetany.com/files/J7QVCQV353.png',
-                    'website' => 'https://x.com'
+                    'website' => 'https://x.com',
                 ],
                 'category' => 'Design',
             ],
 
-                // Job 5
+            // Job 5
             [
                 'title' => 'Senior Data Engineer',
                 'slug' => 'senior-data-engineer',
@@ -191,12 +191,12 @@ class DatabaseSeeder extends Seeder
                 'company' => [
                     'name' => 'Spotify',
                     'logo' => 'https://cdn.sheetany.com/files/GLYhhICTtX.png',
-                    'website' => 'https://spotify.com'
+                    'website' => 'https://spotify.com',
                 ],
                 'category' => 'Design',
             ],
 
-                // Job 6
+            // Job 6
             [
                 'title' => 'Full-Stack Developer',
                 'slug' => 'full-stack-developer',
@@ -226,12 +226,12 @@ class DatabaseSeeder extends Seeder
                 'company' => [
                     'name' => 'Uber',
                     'logo' => 'https://cdn.sheetany.com/files/lzQE1B4cnW.png',
-                    'website' => 'https://uber.com'
+                    'website' => 'https://uber.com',
                 ],
                 'category' => 'Marketing',
             ],
 
-                // Job 7
+            // Job 7
             [
                 'title' => 'Data Engineer',
                 'slug' => 'data-engineer',
@@ -261,12 +261,12 @@ class DatabaseSeeder extends Seeder
                 'company' => [
                     'name' => 'Airbnb',
                     'logo' => 'https://cdn.sheetany.com/files/ZjTzZSfNvV.png',
-                    'website' => 'https://airbnb.com'
+                    'website' => 'https://airbnb.com',
                 ],
                 'category' => 'Engineer',
             ],
 
-                // Job 8
+            // Job 8
             [
                 'title' => 'Staff Software Engineer',
                 'slug' => 'staff-software-engineer',
@@ -296,12 +296,12 @@ class DatabaseSeeder extends Seeder
                 'company' => [
                     'name' => 'Facebook',
                     'logo' => 'https://cdn.sheetany.com/files/LGp55aLpA1.png',
-                    'website' => 'https://facebook.com'
+                    'website' => 'https://facebook.com',
                 ],
                 'category' => 'Design',
             ],
 
-                // Job 9
+            // Job 9
             [
                 'title' => 'Front-End Developer',
                 'slug' => 'front-end-developer',
@@ -331,12 +331,12 @@ class DatabaseSeeder extends Seeder
                 'company' => [
                     'name' => 'Instagram',
                     'logo' => 'https://cdn.sheetany.com/files/FIiM9tVTwj.png',
-                    'website' => 'https://www.instagram.com/'
+                    'website' => 'https://www.instagram.com/',
                 ],
                 'category' => 'Engineer',
             ],
 
-                // Job 10
+            // Job 10
             [
                 'title' => 'Full-Stack Developer',
                 'slug' => 'full-stack-developer',
@@ -366,12 +366,12 @@ class DatabaseSeeder extends Seeder
                 'company' => [
                     'name' => 'Google',
                     'logo' => 'https://cdn.sheetany.com/files/62s3Bya34W.png',
-                    'website' => 'https://google.com'
+                    'website' => 'https://google.com',
                 ],
                 'category' => 'Marketing',
             ],
 
-                // Job 11
+            // Job 11
             [
                 'title' => 'Product Manager',
                 'slug' => 'product-manager',
@@ -401,12 +401,12 @@ class DatabaseSeeder extends Seeder
                 'company' => [
                     'name' => 'Twitter',
                     'logo' => 'https://cdn.sheetany.com/files/J7QVCQV353.png',
-                    'website' => 'https://x.com'
+                    'website' => 'https://x.com',
                 ],
                 'category' => 'Engineer',
             ],
 
-                // Job 12
+            // Job 12
             [
                 'title' => 'Full-Stack Developer',
                 'slug' => 'full-stack-developer',
@@ -436,7 +436,7 @@ class DatabaseSeeder extends Seeder
                 'company' => [
                     'name' => 'Amazon',
                     'logo' => 'https://cdn.sheetany.com/files/l4YwwTsk1h.png',
-                    'website' => 'https://amazon.com'
+                    'website' => 'https://amazon.com',
                 ],
                 'category' => 'Marketing',
             ],
@@ -447,7 +447,7 @@ class DatabaseSeeder extends Seeder
             $company = Company::firstOrCreate(
                 ['name' => $item['company']['name']],
                 ['logo' => $item['company']['logo'],
-                 'website' => $item['company']['website']
+                    'website' => $item['company']['website'],
                 ]
             );
 
@@ -465,12 +465,13 @@ class DatabaseSeeder extends Seeder
 
             $job = Job::create([
                 'title' => $item['title'],
-                'slug' => Str::slug($item['title']) . '-' . Str::random(5),
+                'slug' => Str::slug($item['title']).'-'.Str::random(5),
                 'description' => $item['description'],
                 'salary_from' => $item['salary_from'],
                 'salary_to' => $item['salary_to'],
                 'is_remote' => $item['remote'],
                 'type' => $item['type'],
+                'status' => 'published',
                 'apply_url' => $item['apply_url'],
                 'company_id' => $company->id,
                 'location_id' => $location->id,
