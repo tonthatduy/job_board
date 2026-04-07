@@ -83,7 +83,7 @@ class JobController extends Controller
 
     public function destroy(Job $job): RedirectResponse
     {
-        $job->categories()->detach();
+
         $job->delete();
 
         return redirect()
@@ -177,4 +177,33 @@ class JobController extends Controller
 
         return $slug;
     }
+
+    public function trash()
+    {
+        $deleteJobs = Job::onlyTrashed()->get();
+        return view('admin.jobs.trash', compact('deleteJobs'));
+    }
+
+    public function restore($id)
+    {
+        $job = Job::withTrashed()->findOrFail($id);
+        $job->restore();
+
+        return redirect()
+                ->route('admin.jobs.trash')
+                ->with('success', 'Đã khôi phục tin tuyển dụng thành công.');
+    }
+
+    public function forceDelete($id)
+    {
+        $job = Job::withTrashed()->findOrFail($id);
+        $job->categories()->detach();
+
+        $job->forceDelete();
+
+        return redirect()
+                ->route('admin.jobs.trash')
+                ->with('success', 'Đã xoá vĩnh viễn tin tuyển dụng.');
+    }
+
 }
