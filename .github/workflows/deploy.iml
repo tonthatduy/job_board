@@ -1,0 +1,32 @@
+name: Deploy Laravel
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH Deploy
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            cd ${{ secrets.DEPLOY_PATH }}
+            git pull origin main
+
+            # Cài đặt PHP dependencies
+            composer install --no-dev --optimize-autoloader
+
+            # Cài đặt Node dependencies và build assets
+            npm install
+            npm run build
+
+            # Database và Optimization
+            php artisan migrate --force
+            php artisan optimize:clear
+            php artisan optimize
