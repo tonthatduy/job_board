@@ -2,7 +2,7 @@ name: Deploy Laravel
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   deploy:
@@ -17,16 +17,19 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
             cd ${{ secrets.DEPLOY_PATH }}
-            git pull origin main
 
-            # Cài đặt PHP dependencies
-            composer install --no-dev --optimize-autoloader
+            git fetch origin main
+            git reset --hard origin/main
+            git clean -fd # Xóa các file rác phát sinh không nằm trong git
 
-            # Cài đặt Node dependencies và build assets
+            export COMPOSER_ALLOW_SUPERUSER=1
+            composer install --no-dev --optimize-autoloader --no-interaction
+
+
             npm install
             npm run build
 
-            # Database và Optimization
+
             php artisan migrate --force
             php artisan optimize:clear
             php artisan optimize
