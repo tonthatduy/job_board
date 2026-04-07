@@ -5,13 +5,7 @@
     <div class="flex gap-3 items-center flex-wrap">
 
         <!-- Logo -->
-        <a href="{{ route('jobs.show', $job->slug) }}" class="w-20 h-20">
-            <img
-                src="{{ $job->company->logo }}"
-                alt="{{ $job->company->name }}"
-                class="rounded-lg w-full h-full object-cover"
-            >
-        </a>
+
 
         <!-- Content -->
         <div class="flex-1">
