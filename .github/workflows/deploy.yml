@@ -15,21 +15,21 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
+          command_timeout: 30m 
           script: |
             cd ${{ secrets.DEPLOY_PATH }}
-
-            git fetch origin main
-            git reset --hard origin/main
-            git clean -fd # Xóa các file rác phát sinh không nằm trong git
-
+            
+            git pull origin main
+            
             export COMPOSER_ALLOW_SUPERUSER=1
             composer install --no-dev --optimize-autoloader --no-interaction
-
-
+            
             npm install
             npm run build
-
-
+            
+            # Các lệnh Artisan của Laravel
             php artisan migrate --force
             php artisan optimize:clear
             php artisan optimize
+            
+            php artisan queue:restart
