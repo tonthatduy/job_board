@@ -31,6 +31,21 @@ class Job extends Model
 
     protected $dates = ['delete_at'];
 
+    public function scopeFilter($query, array $filters)
+    {
+        $query->when($filters['search'] ?? null, function ($query, $search) {
+            $query->where('title', 'like', '%' . $search . '%');
+        })->when($filters['company_id'] ?? null, function ($query, $companyId) {
+            $query->where('company_id', $companyId);
+        })->when($filters['status'] ?? null, function ($query, $status) {
+            $query->where('status', $status);
+        })->when($filters['location_id'] ?? null, function ($query, $locationId) {
+            $query->where('location_id', $locationId);
+        })->when($filters['level_id'] ?? null, function ($query, $levelId) {
+            $query->where('level_id', $levelId);
+        });
+    }
+
     // Relationship
     public function categories()
     {

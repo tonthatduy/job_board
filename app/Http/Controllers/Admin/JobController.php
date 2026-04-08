@@ -22,17 +22,15 @@ class JobController extends Controller
         $query = Job::with(['company', 'location', 'level', 'categories'])
             ->latest();
 
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-
-        if ($request->filled('search')) {
-            $query->where('title', 'like', '%'.$request->search.'%');
-        }
+        $query->filter($request->only(['search','status','company_id','location_id','level_id']));
 
         $jobs = $query->paginate(15)->withQueryString();
 
-        return view('admin.jobs.index', compact('jobs'));
+        $companies = Company::orderBy('name')->get();
+        $locations = Location::orderBy('name')->get();
+        $levels = Level::orderBy('name')->get();
+
+        return view('admin.jobs.index', compact('jobs', 'companies', 'locations', 'levels'));
     }
 
     public function create(): View
@@ -180,8 +178,8 @@ class JobController extends Controller
 
     public function trash()
     {
-        $deleteJobs = Job::onlyTrashed()->get();
-        return view('admin.jobs.trash', compact('deleteJobs'));
+        $deletedJobs = Job::onlyTrashed()->get();
+        return view('admin.jobs.trash', compact('deletedJobs'));
     }
 
     public function restore($id)

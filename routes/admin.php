@@ -11,7 +11,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('admin')->group(function () {
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-        Route::get('jobs/trash', [JobController::class,'trash'])->name('trash');
+        Route::get('jobs/trash', [JobController::class,'trash'])->name('jobs.trash');
         Route::put('jobs/{id}/restore', [JobController::class,'restore'])->name('jobs.restore');
         Route::delete('jobs/{id}/force-delete', [JobController::class,'forceDelete'])->name('jobs.force-delete');
 

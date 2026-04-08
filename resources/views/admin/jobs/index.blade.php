@@ -16,35 +16,66 @@
     </div>
 
     <div class="mb-6 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm ring-1 ring-slate-900/5 sm:p-5">
-        <form method="get" action="{{ route('admin.jobs.index') }}" class="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end">
-            <div class="min-w-[12rem] flex-1">
-                <label class="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">Tìm theo tiêu đề</label>
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Nhập từ khóa…"
-                       class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-2.5 text-sm transition focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-indigo-500/15">
-            </div>
-            <div class="w-full sm:w-44">
-                <label class="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">Trạng thái</label>
-                <select name="status"
-                        class="w-full cursor-pointer rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-2.5 text-sm transition focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-indigo-500/15">
-                    <option value="">Tất cả</option>
-                    @foreach(['pending' => 'Chờ duyệt', 'published' => 'Đã đăng', 'expired' => 'Hết hạn'] as $val => $label)
-                        <option value="{{ $val }}" @selected(request('status') === $val)>{{ $label }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="flex flex-wrap gap-2">
-                <button type="submit"
-                        class="rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-slate-900/20">
-                    Lọc
-                </button>
-                @if(request()->hasAny(['search', 'status']))
-                    <a href="{{ route('admin.jobs.index') }}"
-                       class="inline-flex items-center rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50">
-                        Xóa lọc
-                    </a>
-                @endif
-            </div>
-        </form>
+        <form method="get" action="{{ route('admin.jobs.index') }}" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-6 items-end">
+    <div class="lg:col-span-2">
+        <label class="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">Tiêu đề</label>
+        <input type="text" name="search" value="{{ request('search') }}" placeholder="Nhập từ khóa…"
+               class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-2.5 text-sm transition focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-indigo-500/15">
+    </div>
+
+    <div>
+        <label class="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">Công ty</label>
+        <select name="company_id" class="w-full cursor-pointer rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-2.5 text-sm transition focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-indigo-500/15">
+            <option value="">Tất cả</option>
+            @foreach($companies as $company)
+                <option value="{{ $company->id }}" @selected(request('company_id') == $company->id)>{{ $company->name }}</option>
+            @endforeach
+        </select>
+    </div>
+
+    <div>
+        <label class="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">Địa điểm</label>
+        <select name="location_id" class="w-full cursor-pointer rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-2.5 text-sm transition focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-indigo-500/15">
+            <option value="">Tất cả</option>
+            @foreach($locations as $location)
+                <option value="{{ $location->id }}" @selected(request('location_id') == $location->id)>{{ $location->name }}</option>
+            @endforeach
+        </select>
+    </div>
+
+    <div>
+        <label class="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">Cấp bậc</label>
+        <select name="level_id" class="w-full cursor-pointer rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-2.5 text-sm transition focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-indigo-500/15">
+            <option value="">Tất cả</option>
+            @foreach($levels as $level)
+                <option value="{{ $level->id }}" @selected(request('level_id') == $level->id)>{{ $level->name }}</option>
+            @endforeach
+        </select>
+    </div>
+
+    <div>
+        <label class="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">Trạng thái</label>
+        <div class="flex gap-2">
+            <select name="status" class="w-full cursor-pointer rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-2.5 text-sm transition focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-indigo-500/15">
+                <option value="">Tất cả</option>
+                @foreach(['pending' => 'Chờ', 'published' => 'Đã đăng', 'expired' => 'Hết hạn'] as $val => $label)
+                    <option value="{{ $val }}" @selected(request('status') === $val)>{{ $label }}</option>
+                @endforeach
+            </select>
+            <button type="submit" class="rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800">
+                Lọc
+            </button>
+        </div>
+    </div>
+</form>
+
+@if(request()->hasAny(['search', 'status', 'company_id', 'location_id', 'level_id']))
+    <div class="mt-4">
+        <a href="{{ route('admin.jobs.index') }}" class="text-xs font-medium text-indigo-600 hover:underline">
+            ✕ Xóa tất cả bộ lọc
+        </a>
+    </div>
+@endif
     </div>
 
     <div class="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm ring-1 ring-slate-900/5">
